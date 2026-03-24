@@ -29,4 +29,8 @@ return [
         "confirmed" => "Password confirmation does not match.",
     ],
 
+    "login" => [
+        "required" => "failed email / phone is required to login",
+    ]
+
 ];

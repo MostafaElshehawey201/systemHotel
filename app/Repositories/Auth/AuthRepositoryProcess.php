@@ -2,11 +2,12 @@
 
 namespace App\Repositories\Auth;
 
+use App\Interfaces\Auth\AuthLoginByPhoneInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthRepositoryProcess implements AuthRegisterRepositoryInterface
+class AuthRepositoryProcess implements AuthRegisterRepositoryInterface , AuthLoginByPhoneInterface
 {
     /**
      * Create a new class instance.
