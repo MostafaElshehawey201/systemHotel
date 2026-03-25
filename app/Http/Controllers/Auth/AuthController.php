@@ -14,15 +14,18 @@ use App\Http\DTO\Auth\RegisterDTO;
 use App\Http\Requests\Auth\AuthLoginRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
+use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
 use App\Trait\Response\ApiResponse;
 use Illuminate\Container\Attributes\Auth;
+use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface) {}
+    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface) {}
     public function register(AuthRegisterRequest $authRegisterRequest)
     {
         try {
@@ -52,6 +55,16 @@ class AuthController extends Controller
             return $this->error($e, 412);
         } catch (AuthInvalidLoginDataException $e) {
             return $this->error($e, 411);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+            $return = $this->auth_logout_interface->logout($request);
+            return $this->success(__('messages.logout.done'), 200);
+        } catch (Throwable $e) {
+            return $this->error($e, 501);
         }
     }
 }

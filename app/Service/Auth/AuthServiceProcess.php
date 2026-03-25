@@ -5,11 +5,13 @@ namespace App\Service\Auth;
 use App\Exceptions\Auth\AuhtPhoneExistException;
 use App\Exceptions\Auth\AuthEmailExistException;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
+use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
+use Illuminate\Support\Facades\Auth;
 
-class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface
+class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface
 {
     /**
      * Create a new class instance.
@@ -33,5 +35,8 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
 
     public function login($DTOLogin){
         return $this->login_manager_strategy_interface->LoginManagerStrategyInterfaceMethod($DTOLogin);
+    }
+    public function logout($request){
+        return $request->user()->currentAccessToken()->delete();
     }
 }
