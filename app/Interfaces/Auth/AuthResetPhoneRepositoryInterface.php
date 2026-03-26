@@ -6,5 +6,5 @@ interface AuthResetPhoneRepositoryInterface
 {
 
     public function resetByPhone($DTOLoginReset);
-    public function otp();
+    public function otp($return);
 }

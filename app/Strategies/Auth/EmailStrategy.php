@@ -30,6 +30,8 @@ class EmailStrategy implements LoginStrategyInterface
             throw new PasswordErrorException(422);
         }
 
+        
+
         return [
             "token" => $user->createToken('auth_token')->plainTextToken,
             "user" => $user

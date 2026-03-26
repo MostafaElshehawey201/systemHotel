@@ -24,9 +24,9 @@ class ResetPhoneStrategy implements ResetStrategyInterface
     public function otpReset($DTOLoginReset)
     {
         $return = $this->auth_reset_phone_repository_interface->resetByPhone($DTOLoginReset);
-        if ($return == 0) {
+        if ($return == null) {
             throw new PhoneNotFoundException(422);
         }
-        return $this->auth_reset_phone_repository_interface->otp();
+        return $this->auth_reset_phone_repository_interface->otp($return);
     }
 }

@@ -6,5 +6,5 @@ interface AuthResetEmailRepositoryInterface
 {
     public function reset($DTOLoginReset);
 
-    public function otp();
+    public function otp($return);
 }

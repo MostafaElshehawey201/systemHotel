@@ -24,9 +24,10 @@ class ResetEmailStrategy implements ResetStrategyInterface
     public function otpReset($DTOLoginReset)
     {
         $return = $this->auth_reset_email_repository_interface->reset($DTOLoginReset);
-        if ($return == 0) {
+        if ($return == null) {
             throw new EmailNotFoundException(422);
         }
-        return $this->auth_reset_email_repository_interface->otp();
+
+        return $this->auth_reset_email_repository_interface->otp($return);
     }
 }

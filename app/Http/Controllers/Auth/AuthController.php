@@ -75,6 +75,10 @@ class AuthController extends Controller
         }
     }
 
+    public function resetPassword(){
+        
+    }
+
     public function logout(Request $request)
     {
         try {
