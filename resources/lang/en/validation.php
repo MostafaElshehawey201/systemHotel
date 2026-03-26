@@ -31,6 +31,7 @@ return [
 
     "login" => [
         "required" => "failed email / phone is required to login",
+        "login.string" => "this failed must enter email or phone number alone"
     ]
 
 ];

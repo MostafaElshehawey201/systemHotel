@@ -4,10 +4,12 @@ namespace App\Repositories\Auth;
 
 use App\Interfaces\Auth\AuthLoginByPhoneInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
+use App\Interfaces\Auth\AuthResetEmailRepositoryInterface;
+use App\Interfaces\Auth\AuthResetPhoneRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthRepositoryProcess implements AuthRegisterRepositoryInterface , AuthLoginByPhoneInterface
+class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLoginByPhoneInterface, AuthResetEmailRepositoryInterface, AuthResetPhoneRepositoryInterface
 {
     /**
      * Create a new class instance.
@@ -17,20 +19,38 @@ class AuthRepositoryProcess implements AuthRegisterRepositoryInterface , AuthLog
         //
     }
 
-    public function email($email){
-        return User::where('email' , $email)->exists();
+    public function email($email)
+    {
+        return User::where('email', $email)->exists();
     }
 
-    public function phone($phone){
-        return User::where('phone' , $phone)->exists();
+    public function phone($phone)
+    {
+        return User::where('phone', $phone)->exists();
     }
 
-    public function register($DTORegister){
+    public function register($DTORegister)
+    {
         return User::create([
             "name" => $DTORegister->name,
             "email" => $DTORegister->email,
             "phone" => $DTORegister->phone,
             "password" => Hash::make($DTORegister->password),
         ]);
+    }
+
+    public function reset($DTOLoginReset)
+    {
+        return User::where('email', $DTOLoginReset->login)->exists();
+    }
+
+    public function resetByPhone($DTOLoginReset)
+    {
+        return User::where('phone', $DTOLoginReset->login)->exists();
+    }
+
+    public function otp()
+    {
+        return random_int(100000 , 999999);
     }
 }

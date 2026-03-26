@@ -8,15 +8,17 @@ use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
+use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
+use App\Interfaces\Strategy\ResetManagerStrategyInterface;
 use Illuminate\Support\Facades\Auth;
 
-class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface
+class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface , AuthResetPasswordServiceInterface
 {
     /**
      * Create a new class instance.
      */
-    public function __construct(protected AuthRegisterRepositoryInterface $auth_register_repository_interface , protected LoginManagerStrategyInterface $login_manager_strategy_interface)
+    public function __construct(protected AuthRegisterRepositoryInterface $auth_register_repository_interface , protected LoginManagerStrategyInterface $login_manager_strategy_interface , protected ResetManagerStrategyInterface $reset_manager_strategy_interface)
     {
         //
     }
@@ -36,6 +38,11 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
     public function login($DTOLogin){
         return $this->login_manager_strategy_interface->LoginManagerStrategyInterfaceMethod($DTOLogin);
     }
+
+    public function otpResetPassword($DTOLoginReset){
+        return $this->reset_manager_strategy_interface->otpResetPassword($DTOLoginReset);
+    }
+
     public function logout($request){
         return $request->user()->currentAccessToken()->delete();
     }
