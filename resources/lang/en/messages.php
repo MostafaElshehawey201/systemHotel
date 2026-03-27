@@ -9,4 +9,6 @@ return [
     'login.invalid' => 'credintaiol not correct',
     'logout.done' => 'logout successfully',
     'otp.notValid' => 'otp is not valied used',
+    'password.notChange' => 'password not updated',
+    'password.change' => 'password updated successfully',
 ];

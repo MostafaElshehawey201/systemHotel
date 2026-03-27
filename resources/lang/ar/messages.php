@@ -9,5 +9,7 @@ return [
     'login.invalid' => 'بيانات الادخال غير صحيحة',
     'logout.done' => 'تم تسجيل الخروج بنجاح',
     'otp.notValid' => 'رمز التحقق غير قابل للأستخدام',
+    'password.notChange' => 'لم يتم تحديث الباسورد',
+    'password.change' => 'تم تحديث الباسورد بنجاح',
 
 ];

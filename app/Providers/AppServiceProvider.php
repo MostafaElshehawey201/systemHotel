@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Auth\AuthChangePasswordRepositoryIntterface;
+use App\Interfaces\Auth\AuthChangePasswordServiceInterface;
 use App\Interfaces\Auth\AuthLoginRepositoryInterface;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
@@ -80,6 +82,14 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             AuthResetChangePasswordRepositoryInterface::class,
+            AuthRepositoryProcess::class,
+        );
+        $this->app->bind(
+            AuthChangePasswordServiceInterface::class,
+            AuthServiceProcess::class,
+        );
+        $this->app->bind(
+            AuthChangePasswordRepositoryIntterface::class,
             AuthRepositoryProcess::class,
         );
     }

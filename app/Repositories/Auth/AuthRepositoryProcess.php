@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Auth;
 
+use App\Interfaces\Auth\AuthChangePasswordRepositoryIntterface;
 use App\Interfaces\Auth\AuthLoginByPhoneInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthResetChangePasswordRepositoryInterface;
@@ -11,7 +12,7 @@ use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLoginByPhoneInterface, AuthResetEmailRepositoryInterface, AuthResetPhoneRepositoryInterface , AuthResetChangePasswordRepositoryInterface
+class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLoginByPhoneInterface, AuthResetEmailRepositoryInterface, AuthResetPhoneRepositoryInterface, AuthResetChangePasswordRepositoryInterface, AuthChangePasswordRepositoryIntterface
 {
     /**
      * Create a new class instance.
@@ -53,7 +54,7 @@ class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLogi
 
     public function otp($return)
     {
-        $otp = random_int(100000 , 999999);
+        $otp = random_int(100000, 999999);
         Otp::create([
             "user_id" => $return->id,
             "otp" => $otp,
@@ -63,14 +64,15 @@ class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLogi
         return $otp;
     }
 
-    public function dataOtp($DTOResetPassword){
-        return Otp::with('user')->where('otp' , $DTOResetPassword->otp)->first();
+    public function dataOtp($DTOResetPassword)
+    {
+        return Otp::with('user')->where('otp', $DTOResetPassword->otp)->first();
     }
     public function checkOtp($otp)
     {
-        if($otp->used == 1 && $otp->expires_at < now()){
+        if ($otp->used == 1 && $otp->expires_at < now()) {
             return false;
-        }else{
+        } else {
             $user = $otp->user;
             $otp->update([
                 "user" => 'user_id',
@@ -79,8 +81,12 @@ class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLogi
             ]);
             return $user->createToken('auth_token')->plainTextToken;
         }
-
     }
 
-
+    public function changePassword($user, $changePasswordDTO)
+    {
+        return $user->update([
+            "password" => Hash::make($changePasswordDTO->password),
+        ]);
+    }
 }

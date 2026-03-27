@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\Auth\AuhtPhoneExistException;
+use App\Exceptions\Auth\AuthChangePasswordExcption;
 use App\Exceptions\Auth\AuthEmailExistException;
 use App\Exceptions\Auth\AuthInvalidLoginDataException;
 use App\Exceptions\Auth\AuthOtpNotValidException;
@@ -35,7 +36,7 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface, protected AuthResetChangePasswordServiceinterface $auth_reset_change_password ,protected AuthChangePasswordServiceInterface $auth_change_password_service_interface) {}
+    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface, protected AuthResetChangePasswordServiceinterface $auth_reset_change_password, protected AuthChangePasswordServiceInterface $auth_change_password_service_interface) {}
     public function register(AuthRegisterRequest $authRegisterRequest)
     {
         try {
@@ -94,11 +95,16 @@ class AuthController extends Controller
         }
     }
 
-    public function changePassword(Request $request , AuthChangePasswordRequest $authChangePasswordRequest){
-        $validation = $authChangePasswordRequest->vlaidated();
-        $changePasswordDTO = new ChangePasswordDTO($validation);
-        $this->auth_change_password_service_interface->changePassword($changePasswordDTO);
-
+    public function changePassword(AuthChangePasswordRequest $authChangePasswordRequest)
+    {
+        try {
+            $validation = $authChangePasswordRequest->validated();
+            $changePasswordDTO = new ChangePasswordDTO($validation);
+            $updatePassword = $this->auth_change_password_service_interface->changePassword($changePasswordDTO);
+            return $this->success(__('messages.password.change'), 200);
+        } catch (AuthChangePasswordExcption $e) {
+            return $this->error($e->getMessage(), 422);
+        }
     }
 
     public function logout(Request $request)
