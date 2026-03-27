@@ -8,4 +8,5 @@ return [
     'password.error' => 'password not valid',
     'login.invalid' => 'credintaiol not correct',
     'logout.done' => 'logout successfully',
+    'otp.notValid' => 'otp is not valied used',
 ];

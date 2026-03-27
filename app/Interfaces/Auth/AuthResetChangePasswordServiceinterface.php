@@ -4,5 +4,5 @@ namespace App\Interfaces\Auth;
 
 interface AuthResetChangePasswordServiceinterface
 {
-    public function resetPassword($DTOResetPassword);
+    public function tokenResetPassword($DTOResetPassword);
 }

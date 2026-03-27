@@ -4,13 +4,15 @@ namespace App\Repositories\Auth;
 
 use App\Interfaces\Auth\AuthLoginByPhoneInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
+use App\Interfaces\Auth\AuthResetChangePasswordRepositoryInterface;
 use App\Interfaces\Auth\AuthResetEmailRepositoryInterface;
 use App\Interfaces\Auth\AuthResetPhoneRepositoryInterface;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Override;
 
-class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLoginByPhoneInterface, AuthResetEmailRepositoryInterface, AuthResetPhoneRepositoryInterface
+class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLoginByPhoneInterface, AuthResetEmailRepositoryInterface, AuthResetPhoneRepositoryInterface , AuthResetChangePasswordRepositoryInterface
 {
     /**
      * Create a new class instance.
@@ -61,4 +63,25 @@ class AuthRepositoryProcess implements AuthRegisterRepositoryInterface, AuthLogi
         ]);
         return $otp;
     }
+
+    public function dataOtp($DTOResetPassword){
+        return Otp::with('user')->where('otp' , $DTOResetPassword->otp)->first();
+    }
+    public function checkOtp($otp)
+    {
+        if($otp->used == 1 && $otp->expires_at < now()){
+            return false;
+        }else{
+            $user = $otp->user;
+            $otp->update([
+                "user" => 'user_id',
+                "expires_at" => now(),
+                "used" => 1,
+            ]);
+            return $user->createToken('auth_token')->plainTextToken;
+        }
+
+    }
+
+
 }

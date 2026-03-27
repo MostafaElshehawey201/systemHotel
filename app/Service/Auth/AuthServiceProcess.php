@@ -4,10 +4,12 @@ namespace App\Service\Auth;
 
 use App\Exceptions\Auth\AuhtPhoneExistException;
 use App\Exceptions\Auth\AuthEmailExistException;
+use App\Exceptions\Auth\AuthOtpNotValidException;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
+use App\Interfaces\Auth\AuthResetChangePasswordRepositoryInterface;
 use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
@@ -19,7 +21,7 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
     /**
      * Create a new class instance.
      */
-    public function __construct(protected AuthRegisterRepositoryInterface $auth_register_repository_interface , protected LoginManagerStrategyInterface $login_manager_strategy_interface , protected ResetManagerStrategyInterface $reset_manager_strategy_interface)
+    public function __construct(protected AuthRegisterRepositoryInterface $auth_register_repository_interface , protected LoginManagerStrategyInterface $login_manager_strategy_interface , protected ResetManagerStrategyInterface $reset_manager_strategy_interface ,protected AuthResetChangePasswordRepositoryInterface $auth_reset_change_password_repository_interface)
     {
         //
     }
@@ -44,8 +46,14 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
         return $this->reset_manager_strategy_interface->otpResetPassword($DTOLoginReset);
     }
 
-    public function resetPassword($DTOResetPassword){
-        dd($DTOResetPassword);
+    public function tokenResetPassword($DTOResetPassword){
+        $otp = $this->auth_reset_change_password_repository_interface->dataOtp($DTOResetPassword);
+        $returnCheck = $this->auth_reset_change_password_repository_interface->checkOtp($otp);
+        if($returnCheck == false){
+            throw new AuthOtpNotValidException(422);
+        }else{
+            return $returnCheck;
+        }
     }
 
     public function logout($request){

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\Auth\AuhtPhoneExistException;
 use App\Exceptions\Auth\AuthEmailExistException;
 use App\Exceptions\Auth\AuthInvalidLoginDataException;
+use App\Exceptions\Auth\AuthOtpNotValidException;
 use App\Exceptions\Auth\EmailNotFoundException;
 use App\Exceptions\Auth\PasswordErrorException;
 use App\Exceptions\Auth\PhoneNotFoundException;
@@ -31,7 +32,7 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface , protected AuthResetChangePasswordServiceinterface $auth_reset_change_password) {}
+    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface, protected AuthResetChangePasswordServiceinterface $auth_reset_change_password) {}
     public function register(AuthRegisterRequest $authRegisterRequest)
     {
         try {
@@ -78,10 +79,16 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(AuthOtpRequest $authOtpRequest){
-        $validation = $authOtpRequest->validated();
-        $DTOResetPassword = new ResetPasswordDTO($validation);
-        $this->auth_reset_change_password->resetPassword($DTOResetPassword);
+    public function tokenResetPassword(AuthOtpRequest $authOtpRequest)
+    {
+        try {
+            $validation = $authOtpRequest->validated();
+            $DTOResetPassword = new ResetPasswordDTO($validation);
+            $token = $this->auth_reset_change_password->tokenResetPassword($DTOResetPassword);
+            return $this->success($token, 200);
+        } catch (AuthOtpNotValidException $e) {
+            return $this->error($e->getMessage(), 422);
+        }
     }
 
     public function logout(Request $request)

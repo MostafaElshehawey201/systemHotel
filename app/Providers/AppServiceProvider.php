@@ -7,6 +7,7 @@ use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
+use App\Interfaces\Auth\AuthResetChangePasswordRepositoryInterface;
 use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetEmailRepositoryInterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
@@ -75,6 +76,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AuthResetChangePasswordServiceinterface::class,
             AuthServiceProcess::class,
+        );
+
+        $this->app->bind(
+            AuthResetChangePasswordRepositoryInterface::class,
+            AuthRepositoryProcess::class,
         );
     }
 
