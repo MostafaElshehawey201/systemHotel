@@ -10,14 +10,17 @@ use App\Exceptions\Auth\PasswordErrorException;
 use App\Exceptions\Auth\PhoneNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\DTO\Auth\LoginDTO;
+use App\Http\DTO\Auth\OtpResetPasswordDTO;
 use App\Http\DTO\Auth\RegisterDTO;
 use App\Http\DTO\Auth\ResetPasswordDTO;
 use App\Http\Requests\Auth\AuthLoginRequest;
+use App\Http\Requests\Auth\AuthOtpRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
 use App\Http\Requests\Auth\AuthResetPasswordRequest;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
+use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Trait\Response\ApiResponse;
 use Illuminate\Container\Attributes\Auth;
@@ -28,7 +31,7 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface) {}
+    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface , protected AuthResetChangePasswordServiceinterface $auth_reset_change_password) {}
     public function register(AuthRegisterRequest $authRegisterRequest)
     {
         try {
@@ -65,7 +68,7 @@ class AuthController extends Controller
     {
         try {
             $validation = $authResetPasswordRequest->validated();
-            $DTOLoginReset = new ResetPasswordDTO($validation);
+            $DTOLoginReset = new OtpResetPasswordDTO($validation);
             $otp = $this->auth_reset_password_service_interface->otpResetPassword($DTOLoginReset);
             return $this->success($otp, 200);
         } catch (PhoneNotFoundException $e) {
@@ -75,8 +78,10 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(){
-        
+    public function resetPassword(AuthOtpRequest $authOtpRequest){
+        $validation = $authOtpRequest->validated();
+        $DTOResetPassword = new ResetPasswordDTO($validation);
+        $this->auth_reset_change_password->resetPassword($DTOResetPassword);
     }
 
     public function logout(Request $request)

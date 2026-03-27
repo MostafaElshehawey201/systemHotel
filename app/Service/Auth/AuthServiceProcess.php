@@ -8,12 +8,13 @@ use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
+use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
 use App\Interfaces\Strategy\ResetManagerStrategyInterface;
 use Illuminate\Support\Facades\Auth;
 
-class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface , AuthResetPasswordServiceInterface
+class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface , AuthResetPasswordServiceInterface , AuthResetChangePasswordServiceinterface
 {
     /**
      * Create a new class instance.
@@ -43,7 +44,13 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
         return $this->reset_manager_strategy_interface->otpResetPassword($DTOLoginReset);
     }
 
+    public function resetPassword($DTOResetPassword){
+        dd($DTOResetPassword);
+    }
+
     public function logout($request){
         return $request->user()->currentAccessToken()->delete();
     }
+
+
 }

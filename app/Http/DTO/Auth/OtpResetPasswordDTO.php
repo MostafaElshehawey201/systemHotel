@@ -2,11 +2,13 @@
 
 namespace App\Http\DTO\Auth;
 
-class ResetPasswordDTO{
-    public $otp;
+
+class OtpResetPasswordDTO{
+
+    public $login;
 
     public function __construct($validation)
     {
-        $this->otp = $validation['otp'];
+        $this->login = $validation['login'];
     }
 }

@@ -32,6 +32,12 @@ return [
     "login" => [
         "required" => "failed email / phone is required to login",
         "login.string" => "this failed must enter email or phone number alone"
+    ],
+
+    'otp' =>[
+        'required' => 'The OTP field is required',
+        'digits' => 'The OTP must be exactly 6 digits',
+        'exists' => 'The provided OTP is invalid or does not exist',
     ]
 
 ];
