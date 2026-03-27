@@ -10,21 +10,24 @@ use App\Exceptions\Auth\EmailNotFoundException;
 use App\Exceptions\Auth\PasswordErrorException;
 use App\Exceptions\Auth\PhoneNotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\DTO\Auth\ChangePasswordDTO;
 use App\Http\DTO\Auth\LoginDTO;
 use App\Http\DTO\Auth\OtpResetPasswordDTO;
 use App\Http\DTO\Auth\RegisterDTO;
 use App\Http\DTO\Auth\ResetPasswordDTO;
+use App\Http\Requests\Auth\AuthChangePasswordRequest;
 use App\Http\Requests\Auth\AuthLoginRequest;
 use App\Http\Requests\Auth\AuthOtpRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
 use App\Http\Requests\Auth\AuthResetPasswordRequest;
+use App\Interfaces\Auth\AuthChangePasswordInterface;
+use App\Interfaces\Auth\AuthChangePasswordServiceInterface;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterServiceInterface;
 use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Trait\Response\ApiResponse;
-use Illuminate\Container\Attributes\Auth;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
@@ -32,7 +35,7 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface, protected AuthResetChangePasswordServiceinterface $auth_reset_change_password) {}
+    public function __construct(protected AuthRegisterServiceInterface $auth_register_service_interface, protected AuthLoginServiceInterface $auth_login_service_interface, protected AuthLogoutInterface $auth_logout_interface, protected AuthResetPasswordServiceInterface $auth_reset_password_service_interface, protected AuthResetChangePasswordServiceinterface $auth_reset_change_password ,protected AuthChangePasswordServiceInterface $auth_change_password_service_interface) {}
     public function register(AuthRegisterRequest $authRegisterRequest)
     {
         try {
@@ -89,6 +92,13 @@ class AuthController extends Controller
         } catch (AuthOtpNotValidException $e) {
             return $this->error($e->getMessage(), 422);
         }
+    }
+
+    public function changePassword(Request $request , AuthChangePasswordRequest $authChangePasswordRequest){
+        $validation = $authChangePasswordRequest->vlaidated();
+        $changePasswordDTO = new ChangePasswordDTO($validation);
+        $this->auth_change_password_service_interface->changePassword($changePasswordDTO);
+
     }
 
     public function logout(Request $request)

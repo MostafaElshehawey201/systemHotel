@@ -10,6 +10,7 @@ Route::prefix('v1')->group(function () {
         Route::post('login' , [AuthController::class , 'login']);
         Route::post('otp-reste-password' , [AuthController::class , 'otpResetPassword']);
         Route::post('token-reset-password' , [AuthController::class , 'tokenResetPassword']);
+        Route::post('change-password' , [AuthController::class, 'changePassword'])->middleware('auth:sanctum')             ;
         Route::post('logout' , [AuthController::class , 'logout'])->middleware('auth:sanctum');
     });
 

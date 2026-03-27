@@ -5,6 +5,7 @@ namespace App\Service\Auth;
 use App\Exceptions\Auth\AuhtPhoneExistException;
 use App\Exceptions\Auth\AuthEmailExistException;
 use App\Exceptions\Auth\AuthOtpNotValidException;
+use App\Interfaces\Auth\AuthChangePasswordServiceInterface;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;
 use App\Interfaces\Auth\AuthRegisterRepositoryInterface;
@@ -14,9 +15,8 @@ use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
 use App\Interfaces\Strategy\ResetManagerStrategyInterface;
-use Illuminate\Support\Facades\Auth;
 
-class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface , AuthResetPasswordServiceInterface , AuthResetChangePasswordServiceinterface
+class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServiceInterface , AuthLogoutInterface , AuthResetPasswordServiceInterface , AuthResetChangePasswordServiceinterface , AuthChangePasswordServiceInterface
 {
     /**
      * Create a new class instance.
@@ -54,6 +54,10 @@ class AuthServiceProcess implements AuthRegisterServiceInterface , AuthLoginServ
         }else{
             return $returnCheck;
         }
+    }
+
+    public function changePassword($changePasswordDTO){
+        
     }
 
     public function logout($request){
