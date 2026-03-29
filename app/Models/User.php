@@ -51,5 +51,8 @@ class User extends Authenticatable
     public function otps(){
         return $this->hasMany(Otp::class);
     }
+    public function floors(){
+        return $this->hasMany(Floor::class);
+    }
 
 }
