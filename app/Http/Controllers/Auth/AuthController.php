@@ -21,7 +21,6 @@ use App\Http\Requests\Auth\AuthLoginRequest;
 use App\Http\Requests\Auth\AuthOtpRequest;
 use App\Http\Requests\Auth\AuthRegisterRequest;
 use App\Http\Requests\Auth\AuthResetPasswordRequest;
-use App\Interfaces\Auth\AuthChangePasswordInterface;
 use App\Interfaces\Auth\AuthChangePasswordServiceInterface;
 use App\Interfaces\Auth\AuthLoginServiceInterface;
 use App\Interfaces\Auth\AuthLogoutInterface;

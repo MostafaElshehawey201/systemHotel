@@ -51,4 +51,5 @@ class User extends Authenticatable
     public function otps(){
         return $this->hasMany(Otp::class);
     }
+
 }
