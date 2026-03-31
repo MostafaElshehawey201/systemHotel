@@ -1,0 +1,32 @@
+name: laravel CI/CD
+
+on:
+    push:
+    branches: ['general']
+
+jobs:
+laravel-test:
+runs-on: ubuntu-latest
+
+steps:
+- name: Clone Code
+uses: actions/checkout@v3
+
+-name: Setup php
+uses: shivammathur/setup-php@v2
+with:
+php-servion: '8.2'
+
+-name: Install Dependencies
+run: computer install
+
+-name: Setup Env
+ru: cp .env.example .env
+
+-name: Generate Key
+run: php artinsn key:generate
+
+-name: Run Tesets
+run: php artisan test
+
+
