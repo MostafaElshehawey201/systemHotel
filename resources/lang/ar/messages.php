@@ -11,5 +11,6 @@ return [
     'otp.notValid' => 'رمز التحقق غير قابل للأستخدام',
     'password.notChange' => 'لم يتم تحديث الباسورد',
     'password.change' => 'تم تحديث الباسورد بنجاح',
+    'floor.create' => 'تم انشاء الطابق بنجاح',
 
 ];

@@ -14,11 +14,15 @@ use App\Interfaces\Auth\AuthResetChangePasswordServiceinterface;
 use App\Interfaces\Auth\AuthResetEmailRepositoryInterface;
 use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Auth\AuthResetPhoneRepositoryInterface;
+use App\Interfaces\Floor\CreateFloorRepositoryInterface;
+use App\Interfaces\Floor\CreateFloorServiceInterface;
 use App\Interfaces\Profile\ProfileUserInterface;
 use App\Interfaces\Strategy\LoginManagerStrategyInterface;
 use App\Interfaces\Strategy\ResetManagerStrategyInterface;
 use App\Repositories\Auth\AuthRepositoryProcess;
+use App\Repositories\Floor\FloorRepository;
 use App\Service\Auth\AuthServiceProcess;
+use App\Service\Floor\FloorService;
 use App\Service\Profile\ProfileUserService;
 use App\Strategies\Auth\LoginManagerStrategy;
 use App\Strategies\Auth\ResetManagerStrategy;
@@ -92,6 +96,15 @@ class AppServiceProvider extends ServiceProvider
             AuthChangePasswordRepositoryIntterface::class,
             AuthRepositoryProcess::class,
         );
+        $this->app->bind(
+            CreateFloorServiceInterface::class,
+            FloorService::class,
+        );
+        $this->app->bind(
+            CreateFloorRepositoryInterface::class,
+            FloorRepository::class,
+        );
+
     }
 
     /**

@@ -11,4 +11,5 @@ return [
     'otp.notValid' => 'otp is not valied used',
     'password.notChange' => 'password not updated',
     'password.change' => 'password updated successfully',
+    'floor.create' => 'floor created successfully',
 ];

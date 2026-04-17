@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('floors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->boolean('status' ,['0','1'])->default('0');
-            $table->string('title')->unique();
-            $table->string('description');
+            $table->boolean('status' , [0,1])->default(0);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
