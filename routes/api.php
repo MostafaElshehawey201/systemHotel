@@ -21,5 +21,8 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum' , 'apiLang')->prefix('admin-panel')->group(function(){
         Route::post('create-floor' , [FloorController::class , 'createFloor']);
+        Route::get('floors' , [FloorController::class , 'floors'])->name('floors');
     });
+
+
 });

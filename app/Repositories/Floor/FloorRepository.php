@@ -3,10 +3,11 @@
 namespace App\Repositories\Floor;
 
 use App\Interfaces\Floor\CreateFloorRepositoryInterface;
+use App\Interfaces\Floor\FloorsRepositoryInterface;
 use App\Models\Floor;
 use App\Models\Translation;
 
-class FloorRepository implements CreateFloorRepositoryInterface
+class FloorRepository implements CreateFloorRepositoryInterface , FloorsRepositoryInterface
 {
     /**
      * Create a new class instance.
@@ -57,5 +58,9 @@ class FloorRepository implements CreateFloorRepositoryInterface
                 "image" => $image,
             ]);
         }
+    }
+
+    public function floors(){
+        return Floor::with('transalations:translatable_id,value')->select('id')->get();
     }
 }

@@ -3,17 +3,22 @@
 namespace App\Service\Floor;
 
 use App\Exceptions\Floor\FloorCreatedNotValidException;
+use App\Exceptions\Floor\NotExsistingFloorsException;
 use App\Interfaces\Floor\CreateFloorRepositoryInterface;
 use App\Interfaces\Floor\CreateFloorServiceInterface;
+use App\Interfaces\Floor\FloorsRepositoryInterface;
+use App\Interfaces\Floor\FloorsServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
-class FloorService implements CreateFloorServiceInterface
+class FloorService implements CreateFloorServiceInterface, FloorsServiceInterface
 {
     /**
      * Create a new class instance.
      */
-    public function __construct(protected CreateFloorRepositoryInterface $create_floor_repository_interface)
-    {
+    public function __construct(
+        protected CreateFloorRepositoryInterface $create_floor_repository_interface,
+        protected FloorsRepositoryInterface $floors_repository_interface
+    ) {
         //
     }
 
@@ -28,5 +33,14 @@ class FloorService implements CreateFloorServiceInterface
             }
             throw new FloorCreatedNotValidException(422);
         }
+    }
+
+    public function floors()
+    {
+        $floors = $this->floors_repository_interface->floors();
+        if ($floors->isEmpty()) {
+            throw new NotExsistingFloorsException(422);
+        }
+        return $floors;
     }
 }
