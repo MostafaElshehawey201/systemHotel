@@ -2,22 +2,26 @@
 
 namespace App\Service\Floor;
 
+use App\Exceptions\Floor\EditIdFloorNotValidException;
 use App\Exceptions\Floor\FloorCreatedNotValidException;
 use App\Exceptions\Floor\NotExsistingFloorsException;
 use App\Interfaces\Floor\CreateFloorRepositoryInterface;
 use App\Interfaces\Floor\CreateFloorServiceInterface;
+use App\Interfaces\Floor\EditFloorRepositoryInterface;
+use App\Interfaces\Floor\EditFloorServiceInterface;
 use App\Interfaces\Floor\FloorsRepositoryInterface;
 use App\Interfaces\Floor\FloorsServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
-class FloorService implements CreateFloorServiceInterface, FloorsServiceInterface
+class FloorService implements CreateFloorServiceInterface, FloorsServiceInterface, EditFloorServiceInterface
 {
     /**
      * Create a new class instance.
      */
     public function __construct(
         protected CreateFloorRepositoryInterface $create_floor_repository_interface,
-        protected FloorsRepositoryInterface $floors_repository_interface
+        protected FloorsRepositoryInterface $floors_repository_interface,
+        protected EditFloorRepositoryInterface $edit_floor_repository_interface,
     ) {
         //
     }
@@ -42,5 +46,12 @@ class FloorService implements CreateFloorServiceInterface, FloorsServiceInterfac
             throw new NotExsistingFloorsException(422);
         }
         return $floors;
+    }
+
+    public function editFloor($floorID) {
+        if($floorID <= 0){
+            throw new EditIdFloorNotValidException(422);
+        }
+        return $this->edit_floor_repository_interface->editFloor($floorID);
     }
 }

@@ -12,5 +12,6 @@ return [
     'password.notChange' => 'password not updated',
     'password.change' => 'password updated successfully',
     'floor.create' => 'floor created successfully',
-    'floors.notExsisting' => 'There is no data about the floors yet'
+    'floors.notExsisting' => 'There is no data about the floors yet',
+    'floor.IdNotValid' => 'The entered identification number is incorrect.'
 ];

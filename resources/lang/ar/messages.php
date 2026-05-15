@@ -13,5 +13,6 @@ return [
     'password.change' => 'تم تحديث الباسورد بنجاح',
     'floor.create' => 'تم انشاء الطابق بنجاح',
     'floors.notExsisting' => 'لا يوجد بيانات عن الطوابق بعد',
+    'floor.IdNotValid' => 'الرقم التعريفي الذ تم ادخالة غير صحيح'
 
 ];

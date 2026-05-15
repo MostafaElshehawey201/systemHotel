@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\DTO\Auth\Floor\CreateFloorDTO;
 use App\Http\Requests\Floor\CreateFloorRequest;
 use App\Interfaces\Floor\CreateFloorServiceInterface;
+use App\Interfaces\Floor\EditFloorServiceInterface;
 use App\Interfaces\Floor\FloorsServiceInterface;
 use App\Trait\Response\ApiResponse;
 
@@ -14,7 +15,8 @@ class FloorController extends Controller
 
     public function __construct(
         protected CreateFloorServiceInterface $create_floor_service_interface,
-        protected FloorsServiceInterface $floors_service_interface
+        protected FloorsServiceInterface $floors_service_interface,
+        protected EditFloorServiceInterface $edit_floor_service_interface,
     ) {}
 
     public function createFloor(CreateFloorRequest $createFloorRequest)
@@ -36,6 +38,16 @@ class FloorController extends Controller
             return $this->success($floors, 200);
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), 422);
+        }
+    }
+
+
+    public function editFloor($floorID){
+        try{
+            $editFloors = $this->edit_floor_service_interface->editFloor($floorID);
+            return $this->success($editFloors , 200);
+        }catch(\Exception $e){
+            return $this->error($e->getMessage() , 422);
         }
     }
 }

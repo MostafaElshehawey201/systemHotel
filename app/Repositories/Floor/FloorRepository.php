@@ -3,11 +3,12 @@
 namespace App\Repositories\Floor;
 
 use App\Interfaces\Floor\CreateFloorRepositoryInterface;
+use App\Interfaces\Floor\EditFloorRepositoryInterface;
 use App\Interfaces\Floor\FloorsRepositoryInterface;
 use App\Models\Floor;
 use App\Models\Translation;
 
-class FloorRepository implements CreateFloorRepositoryInterface , FloorsRepositoryInterface
+class FloorRepository implements CreateFloorRepositoryInterface , FloorsRepositoryInterface , EditFloorRepositoryInterface
 {
     /**
      * Create a new class instance.
@@ -61,6 +62,10 @@ class FloorRepository implements CreateFloorRepositoryInterface , FloorsReposito
     }
 
     public function floors(){
-        return Floor::with('transalations:translatable_id,value')->select('id')->get();
+        return Floor::with('transalations')->paginate(10);
+    }
+
+    public function editFloor($floorID){
+        return Floor::with('transalations')->where('id' , $floorID)->first();
     }
 }

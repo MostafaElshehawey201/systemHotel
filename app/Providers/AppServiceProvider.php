@@ -16,6 +16,8 @@ use App\Interfaces\Auth\AuthResetPasswordServiceInterface;
 use App\Interfaces\Auth\AuthResetPhoneRepositoryInterface;
 use App\Interfaces\Floor\CreateFloorRepositoryInterface;
 use App\Interfaces\Floor\CreateFloorServiceInterface;
+use App\Interfaces\Floor\EditFloorRepositoryInterface;
+use App\Interfaces\Floor\EditFloorServiceInterface;
 use App\Interfaces\Floor\FloorsRepositoryInterface;
 use App\Interfaces\Floor\FloorsServiceInterface;
 use App\Interfaces\Profile\ProfileUserInterface;
@@ -112,6 +114,14 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->bind(
             FloorsRepositoryInterface::class,
+            FloorRepository::class,
+        );
+        $this->app->bind(
+            EditFloorServiceInterface::class,
+            FloorService::class,
+        );
+        $this->app->bind(
+            EditFloorRepositoryInterface::class,
             FloorRepository::class,
         );
 
